@@ -15,12 +15,15 @@ class Villain:
         self.abilities = list()
         self.name = name
         self.armors = list()
+        self.weapons = list()
         self.start_health = health
         self.health = health
         self.deaths = 0
         self.kills = 0
     def add_ability(self, ability):
         self.abilities.append(ability)
+    def add_weapon(self, weapon):
+        self.weapons.append(weapon)
     def attack(self):
         for i in self.abilities:
             return i.attack()
@@ -42,8 +45,11 @@ class Villain:
         print("EXTERMINATED!")
         self.kills += num_kills
 class Weapon(Ability):
+    def _init_(self, name, damage):
+        self.name = name
+        self.damage = damage
     def attack(self):
-        random_int = random.randint(0, 7)
+        random_int = random.randint(0, self.damage)
 class Team:
     def __init__(self, team_name):
         self.team_name = team_name
@@ -127,10 +133,10 @@ class Arena:
         self.team_one = None
         self.team_two = None
 
-    def build_team_one(self, team: Team):
+    def build_team_one(self, team):
         self.team_one = team
 
-    def build_team_two(self, team: Team):
+    def build_team_two(self, team):
         self.team_two = team
 
     def team_battle(self):
@@ -144,6 +150,9 @@ class Arena:
         including each heroes kill/death ratio.
         """
 vil = Villain("Joker")
+venom = Villain("Venom")
+thanos = Villain("Thanos")
+darkside = Villain("Dark Side")
 print(vil.attack())
 ability = Ability("Divine Speed", 300)
 vil.add_ability(ability)
@@ -152,8 +161,25 @@ new_ability = Ability("Super Human Strength", 800)
 vil.add_ability(new_ability)
 print(vil.attack())
 team_exterminate = Team("Team Exterminate")
+team_subordinate = Team("Team Subordinate")
 team_exterminate.add_villain(vil)
 print(team_exterminate.find_villain(vil))
 print(team_exterminate.view_all_villains())
 team_exterminate.remove_villain(vil)
 print(team_exterminate.view_all_villains())
+bane = Villain("Bane")
+bweapon = Weapon("Mace", 800)
+tweapon = Weapon("Glove", 100000)
+dweapon = Weapon("Army of a the Planet Dark Side", 100000)
+bability = Ability("Monologuing", 10)
+tability = Ability("Being Thanos", 10000)
+dability = Ability("Being Dark Side", 10000)
+bane.add_ability(bability)
+bane.add_weapon(bweapon)
+thanos.add_ability(tability)
+darkside.add_ability(dability)
+team_subordinate.add_villain(bane)
+team_subordinate.add_villain(vil)
+team_subordinate.add_villain(darkside)
+team_exterminate.add_villain(venom)
+team_exterminate.add_villain(thanos)
