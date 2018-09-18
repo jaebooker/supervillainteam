@@ -124,11 +124,9 @@ class Team:
             i.health = health
 
     def stats(self):
-        """
-        This method should print the ratio of kills/deaths for each member of the team to the screen.
-
-        This data must be output to the terminal.
-        """
+        for i in self.villains:
+            print(i.name, "kills", i.kills)
+            print(i.name, "deaths", i.deaths)
 
     def update_kills(self):
         for i in self.villains:
@@ -163,7 +161,7 @@ class Arena:
             self.team_two.attack(self.team_one)
             self.team_one.attack(self.team_two)
         else:
-            print("I say HEY! What's going on?!")
+            print("I say 'HEY'! What's going on?!")
         print(self.show_stats())
         if self.team_one_score > self.team_two_score:
             print("And the winner is... ")
@@ -227,5 +225,6 @@ print(team_exterminate.view_all_villains())
 print(team_subordinate.view_all_villains())
 print(team_subordinate.attack(team_exterminate))
 print(team_exterminate.attack(team_subordinate))
+print(team_subordinate.stats())
 new_arena = Arena(team_subordinate, team_exterminate)
 print(new_arena.team_battle())
