@@ -188,7 +188,7 @@ class Arena:
 def team_generator():
     team = Team(raw_input("Choose your team name: "))
     vil1 = Villain(raw_input("Name your first villain: "))
-    ability1 = Ability(raw_input("Give your first villain an ability: "), float(raw_input("How powerful is it? ")))
+    ability1 = Ability(raw_input("Give your first villain an ability: "), float(raw_input("How powerful is it? (Must be a number) ")))
     weapon1 = Weapon(raw_input("Now they need a weapon. Give your first villain a weapon: "), float(raw_input("How powerful is it? ")))
     vil1.add_ability(ability1)
     vil1.add_weapon(weapon1)
@@ -207,14 +207,22 @@ def team_generator():
     team.add_villain(vil1)
     team.add_villain(vil2)
     team.add_villain(vil3)
-    for i in team_list:
-        if i.team_name == team.team_name:
+    print("Great! We're almost done. Now we want to send your villains into battle. Here's a list of their enemies, with numbers corresponding to each one.")
+    for i in range(0, len(team_list)-1):
+        if team_list[i].team_name == team.team_name:
             pass
         else:
-            print(i.team_name)
-    other_team = raw_input("Great! We're almost done. Now we want to send your villains into battle. Here's a list of their enemies. Type the name of the team you'd like them to take on in mortal combat! ")
+            print(i, team_list[i].team_name)
+    other_team = input("Type the number corresponding to the team you'd like them to take on in mortal combat! ")
     print("And now we just...")
-    user_arena = Arena(team, other_team)
+    inty = 0
+    for i in range(0, len(team_list)-1):
+        if i == other_team:
+            enemy_team = team_list[i]
+            inty = 1
+    if inty == 0:
+        print("That's wrong. You screwed it up. You've ruined us all!!")
+    user_arena = Arena(team, enemy_team)
     print("Let them fight!")
     print(user_arena.team_battle())
 
