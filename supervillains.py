@@ -142,9 +142,11 @@ class Armor:
         defense = random.randint(0, self.defense)
         return defense
 class Arena:
-    def __init__(self):
-        self.team_one = None
-        self.team_two = None
+    def __init__(self, team_one, team_two):
+        self.team_one = team_one
+        self.team_two = team_two
+        self.team_one_score = 0
+        self.team_two_score = 0
 
     def build_team_one(self, team):
         self.team_one = team
@@ -153,15 +155,36 @@ class Arena:
         self.team_two = team
 
     def team_battle(self):
-        """
-        To the death!
-        """
-
+        ran_int = random.randint(1, 2)
+        if ran_int == 1:
+            self.team_one.attack(self.team_two)
+            self.team_two.attack(self.team_one)
+        elif ran_int == 2:
+            self.team_two.attack(self.team_one)
+            self.team_one.attack(self.team_two)
+        else:
+            print("I say HEY! What's going on?!")
+        print(self.show_stats())
+        if self.team_one_score > self.team_two_score:
+            print("And the winner is... ")
+            print(self.team_one.team_name)
+        elif self.team_two_score > self.team_one_score:
+            print("And the winner is... ")
+            print(self.team_two.team_name)
+        else:
+            print("It's a... TIE?!?! Lame! Play again!")
     def show_stats(self):
-        """
-        This method should print out the battle statistics
-        including each heroes kill/death ratio.
-        """
+
+        for i in self.team_one.villains:
+            print(i.name, "kills", i.kills)
+            self.team_one_score += i.kills
+            print(i.name, "deaths", i.deaths)
+            self.team_one_score -= i.deaths
+        for n in self.team_two.villains:
+            print(n.name, "kills", n.kills)
+            self.team_two_score += i.kills
+            print(n.name, "deaths", n.deaths)
+            self.team_two_score -= i.deaths
 vil = Villain("Joker")
 venom = Villain("Venom")
 thanos = Villain("Thanos")
@@ -204,3 +227,5 @@ print(team_exterminate.view_all_villains())
 print(team_subordinate.view_all_villains())
 print(team_subordinate.attack(team_exterminate))
 print(team_exterminate.attack(team_subordinate))
+new_arena = Arena(team_subordinate, team_exterminate)
+print(new_arena.team_battle())
