@@ -24,32 +24,41 @@ class Villain:
         self.abilities.append(ability)
     def add_weapon(self, weapon):
         self.weapons.append(weapon)
+    def add_armor(self, armor):
+        self.armors.append(armor)
     def attack(self):
-        for i in self.abilities:
-            return i.attack()
+        if self.abilities:
+            for i in self.abilities:
+                return i.attack()
+        else:
+            return 0
     def defend(self):
         if self.health == 0:
             print("Sorry, this person is quite dead, I'm afraid.")
             return 0
         else:
-            for i in self.armors:
-                return i.defend()
+            if self.armors:
+                for i in self.armors:
+                    return i.defend()
+            else:
+                return 0
 
     def take_damage(self, damage_amt):
         self.health -= damage_amt
         if self.health < 1:
-            print("TERMINATED!")
-            self.death += 1
+            print("TERMINATED!", self.name)
+            self.deaths += 1
 
     def add_kill(self, num_kills):
         print("EXTERMINATED!")
         self.kills += num_kills
-class Weapon(Ability):
-    def _init_(self, name, damage):
+class Weapon:
+    def __init__(self, name, damage):
         self.name = name
         self.damage = damage
     def attack(self):
         random_int = random.randint(0, self.damage)
+        return random_int
 class Team:
     def __init__(self, team_name):
         self.team_name = team_name
@@ -85,13 +94,17 @@ class Team:
         sum = 0
         for i in self.villains:
             sum += i.attack()
+            if i.weapons != None:
+                for n in i.weapons:
+                    sum += n.attack()
         for i in other_team.villains:
             sum -= i.defend()
         if sum > 0:
             other_team.deal_damage(sum)
             for i in other_team.villains:
                 if i.deaths > 0:
-                    self.kills += i.deaths
+                    for v in self.villains:
+                        v.kills += i.deaths
         else:
             return sum
 
@@ -183,3 +196,11 @@ team_subordinate.add_villain(vil)
 team_subordinate.add_villain(darkside)
 team_exterminate.add_villain(venom)
 team_exterminate.add_villain(thanos)
+shield = Armor("Captain America's Shield", 1800)
+thanos.add_armor(shield)
+dark_shield = Armor("Dark Shield", 1800)
+darkside.add_armor(dark_shield)
+print(team_exterminate.view_all_villains())
+print(team_subordinate.view_all_villains())
+print(team_subordinate.attack(team_exterminate))
+print(team_exterminate.attack(team_subordinate))
