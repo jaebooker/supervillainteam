@@ -1,4 +1,5 @@
 import random
+team_list = list()
 class Ability:
     def __init__(self, name, attack_strength):
         self.name = name
@@ -27,9 +28,12 @@ class Villain:
     def add_armor(self, armor):
         self.armors.append(armor)
     def attack(self):
-        if self.abilities:
-            for i in self.abilities:
-                return i.attack()
+        if self.deaths == 0:
+            if self.abilities:
+                for i in self.abilities:
+                    return i.attack()
+            else:
+                return 0
         else:
             return 0
     def defend(self):
@@ -63,6 +67,7 @@ class Team:
     def __init__(self, team_name):
         self.team_name = team_name
         self.villains = list()
+        team_list.append(self)
 
     def add_villain(self, Villain):
         self.villains.append(Villain)
@@ -88,7 +93,7 @@ class Team:
 
     def view_all_villains(self):
         for i in self.villains:
-            print(i.name)
+            print(i.name, " number 1")
 
     def attack(self, other_team):
         sum = 0
@@ -119,16 +124,14 @@ class Team:
         for i in self.villains:
             i.take_damage(ndamage)
 
-    def revive_heroes(self, health=100):
+    def revive_heroes(self, health):
         for i in self.villains:
             i.health = health
 
     def stats(self):
-        """
-        This method should print the ratio of kills/deaths for each member of the team to the screen.
-
-        This data must be output to the terminal.
-        """
+        for i in self.villains:
+            print(i.name, "kills", i.kills)
+            print(i.name, "deaths", i.deaths)
 
     def update_kills(self):
         for i in self.villains:
@@ -148,11 +151,11 @@ class Arena:
         self.team_one_score = 0
         self.team_two_score = 0
 
-    def build_team_one(self, team):
-        self.team_one = team
+    def build_team_one(self):
+        self.team_one = raw_input("Choose team one: ")
 
-    def build_team_two(self, team):
-        self.team_two = team
+    def build_team_two(self):
+        self.team_two = raw_input("Choose team two: ")
 
     def team_battle(self):
         ran_int = random.randint(1, 2)
@@ -163,7 +166,7 @@ class Arena:
             self.team_two.attack(self.team_one)
             self.team_one.attack(self.team_two)
         else:
-            print("I say HEY! What's going on?!")
+            print("I say 'HEY'! What's going on?!")
         print(self.show_stats())
         if self.team_one_score > self.team_two_score:
             print("And the winner is... ")
@@ -185,6 +188,64 @@ class Arena:
             self.team_two_score += i.kills
             print(n.name, "deaths", n.deaths)
             self.team_two_score -= i.deaths
+class Amulet:
+    def __init__(self, name, number, possessor):
+        self.name = name
+        self.number = number
+        self.possessor = possessor
+    def revive(self):
+        if self.number = 1:
+            self.possessor.revive_heroes(100)
+            self.possessor = None
+        else:
+            print("Trying to use an amulet you don't possess? Naughty, naughty.")
+    def whipe_out(self):
+        if self.number = 1:
+            #Deal a crushing blow!
+        else:
+            print("Are you trying to kill your enemies without the amulet?! Me thinks I smell a cheater...")
+
+def team_generator():
+    team = Team(raw_input("Choose your team name: "))
+    vil1 = Villain(raw_input("Name your first villain: "))
+    ability1 = Ability(raw_input("Give your first villain an ability: "), float(raw_input("How powerful is it? (Must be a number) ")))
+    weapon1 = Weapon(raw_input("Now they need a weapon. Give your first villain a weapon: "), float(raw_input("How powerful is it? ")))
+    vil1.add_ability(ability1)
+    vil1.add_weapon(weapon1)
+    vil2 = Villain(raw_input("Name your second villain: "))
+    ability2 = Ability(raw_input("Give your second villain an ability: "), float(raw_input("How powerful is it? ")))
+    weapon2 = Weapon(raw_input("Give your second villain a weapon: "), float(raw_input("How powerful is it? ")))
+    vil2.add_ability(ability2)
+    vil2.add_weapon(weapon2)
+    vil3 = Villain(raw_input("Name your third villain: "))
+    ability3 = Ability(raw_input("Give your third villain an ability: "), float(raw_input("How powerful is it? ")))
+    weapon3 = Weapon(raw_input("Give your third villain a weapon: "), float(raw_input("How powerful is it? ")))
+    vil3.add_ability(ability3)
+    vil1.add_weapon(weapon3)
+    ability4 = Ability(raw_input("Hell, give your third villain another ability. They're a real baddy: "), float(raw_input("How powerful is it? ")))
+    vil1.add_ability(ability4)
+    team.add_villain(vil1)
+    team.add_villain(vil2)
+    team.add_villain(vil3)
+    print("Great! We're almost done. Now we want to send your villains into battle. Here's a list of their enemies, with numbers corresponding to each one.")
+    for i in range(0, len(team_list)-1):
+        if team_list[i].team_name == team.team_name:
+            pass
+        else:
+            print(i, team_list[i].team_name)
+    other_team = input("Type the number corresponding to the team you'd like them to take on in mortal combat! ")
+    print("And now we just...")
+    inty = 0
+    for i in range(0, len(team_list)-1):
+        if i == other_team:
+            enemy_team = team_list[i]
+            inty = 1
+    if inty == 0:
+        print("That's wrong. You screwed it up. You've ruined us all!!")
+    user_arena = Arena(team, enemy_team)
+    print("Let them fight!")
+    print(user_arena.team_battle())
+
 vil = Villain("Joker")
 venom = Villain("Venom")
 thanos = Villain("Thanos")
@@ -227,5 +288,7 @@ print(team_exterminate.view_all_villains())
 print(team_subordinate.view_all_villains())
 print(team_subordinate.attack(team_exterminate))
 print(team_exterminate.attack(team_subordinate))
+print(team_subordinate.stats())
 new_arena = Arena(team_subordinate, team_exterminate)
 print(new_arena.team_battle())
+team_generator()
