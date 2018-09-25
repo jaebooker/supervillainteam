@@ -28,9 +28,12 @@ class Villain:
     def add_armor(self, armor):
         self.armors.append(armor)
     def attack(self):
-        if self.abilities:
-            for i in self.abilities:
-                return i.attack()
+        if self.deaths == 0:
+            if self.abilities:
+                for i in self.abilities:
+                    return i.attack()
+            else:
+                return 0
         else:
             return 0
     def defend(self):
@@ -90,7 +93,7 @@ class Team:
 
     def view_all_villains(self):
         for i in self.villains:
-            print(i.name)
+            print(i.name, " number 1")
 
     def attack(self, other_team):
         sum = 0
@@ -121,7 +124,7 @@ class Team:
         for i in self.villains:
             i.take_damage(ndamage)
 
-    def revive_heroes(self, health=100):
+    def revive_heroes(self, health):
         for i in self.villains:
             i.health = health
 
@@ -185,6 +188,24 @@ class Arena:
             self.team_two_score += i.kills
             print(n.name, "deaths", n.deaths)
             self.team_two_score -= i.deaths
+class Amulet:
+    def __init__(self, name, number, possessor):
+        self.name = name
+        self.number = number
+        self.possessor = possessor
+    def revive(self):
+        if self.number == 1:
+            self.possessor.revive_heroes(100)
+            self.possessor = None
+        else:
+            print("Trying to use an amulet you don't possess? Naughty, naughty.")
+    def whipe_out(self):
+        if self.number == 2:
+            #Deal a crushing blow!
+            self.possessor = None
+        else:
+            print("Are you trying to kill your enemies without the amulet?! Me thinks I smell a cheater...")
+
 def team_generator():
     team = Team(raw_input("Choose your team name: "))
     vil1 = Villain(raw_input("Name your first villain: "))
@@ -225,7 +246,19 @@ def team_generator():
     user_arena = Arena(team, enemy_team)
     print("Let them fight!")
     print(user_arena.team_battle())
-
+    play_again(team, enemy_team)
+def play_again(team1, team2):
+    decision = raw_input("Play again? (y/n)")
+    if lower(decision) == y:
+        print("You have spirit! We shall battle again, then!")
+        team1.revive_heroes(100)
+        team2.revive_heroes(100)
+        team_generator()
+    elif lower(decision) == n:
+        print("Until next time, then.")
+    else:
+        print("What was that? Please use just 'y' or 'n'")
+        play_again()
 vil = Villain("Joker")
 venom = Villain("Venom")
 thanos = Villain("Thanos")
