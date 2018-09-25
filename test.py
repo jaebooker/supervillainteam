@@ -1,4 +1,5 @@
 import random
+import pytest
 team_list = list()
 class Ability:
     def __init__(self, name, attack_strength):
@@ -194,18 +195,19 @@ class Amulet:
         self.number = number
         self.possessor = possessor
     def revive(self):
-        if self.number = 1:
+        if self.number == 1:
             self.possessor.revive_heroes(100)
             self.possessor = None
         else:
             print("Trying to use an amulet you don't possess? Naughty, naughty.")
     def whipe_out(self):
-        if self.number = 1:
+        if self.number == 2:
             #Deal a crushing blow!
+            self.possessor = None
         else:
             print("Are you trying to kill your enemies without the amulet?! Me thinks I smell a cheater...")
 
-def team_generator():
+def _test_team_generator():
     team = Team(raw_input("Choose your team name: "))
     vil1 = Villain(raw_input("Name your first villain: "))
     ability1 = Ability(raw_input("Give your first villain an ability: "), float(raw_input("How powerful is it? (Must be a number) ")))
@@ -245,7 +247,19 @@ def team_generator():
     user_arena = Arena(team, enemy_team)
     print("Let them fight!")
     print(user_arena.team_battle())
-
+    play_again(team, enemy_team)
+def play_again(team1, team2):
+    decision = raw_input("Play again? (y/n)")
+    if lower(decision) == y:
+        print("You have spirit! We shall battle again, then!")
+        team1.revive_heroes(100)
+        team2.revive_heroes(100)
+        _test_team_generator()
+    elif lower(decision) == n:
+        print("Until next time, then.")
+    else:
+        print("What was that? Please use just 'y' or 'n'")
+        play_again()
 vil = Villain("Joker")
 venom = Villain("Venom")
 thanos = Villain("Thanos")
@@ -291,4 +305,4 @@ print(team_exterminate.attack(team_subordinate))
 print(team_subordinate.stats())
 new_arena = Arena(team_subordinate, team_exterminate)
 print(new_arena.team_battle())
-team_generator()
+#team_generator()
